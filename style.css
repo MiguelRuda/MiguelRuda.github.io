@@ -1,90 +1,169 @@
+/* style.css — Minimal constellation aesthetic
+   Changes: responsive layout, refined typography, buttons, project cards,
+   and styling for a full-screen starfield canvas placed behind content.
+*/
 :root {
-    --bg-color: #f4f7f6;
-    --text-color: #333;
-    --accent-color: #4a90e2;
+    --bg-color: #f7fbff;
+    --text-color: #0f1724;
+    --muted: #5b6b7a;
+    --accent-color: #6fb3ff;
+    --card-bg: rgba(255,255,255,0.7);
+    --glass: rgba(255,255,255,0.5);
 }
 
-/* Preferência de modo escuro automática */
 @media (prefers-color-scheme: dark) {
     :root {
-        --bg-color: #1a1a1a;
-        --text-color: #f4f7f6;
-        --accent-color: #5da2f5;
+        --bg-color: #071022;
+        --text-color: #e6f0ff;
+        --muted: #9fb3cc;
+        --accent-color: #6fb3ff;
+        --card-bg: rgba(10,18,30,0.6);
+        --glass: rgba(255,255,255,0.03);
     }
 }
 
+/* Starfield canvas sits behind everything */
+#starfield {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.9;
+    transition: opacity 0.4s ease;
+}
+
+/* Page layout */
+* { box-sizing: border-box; }
+html, body { height: 100%; }
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: Inter, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0;
     padding: 0;
     background-color: var(--bg-color);
     color: var(--text-color);
-    line-height: 1.8;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    min-height: 100vh;
+    position: relative;
+}
+
+/* content wrapper sits above the canvas */
+.site {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
 header {
     text-align: center;
-    padding: 5rem 1rem 2rem 1rem;
+    padding: 5rem 1rem 2rem;
 }
 
 .profile-img {
-    width: 140px;
-    height: 140px;
+    width: 120px;
+    height: 120px;
     border-radius: 50%;
     object-fit: cover;
-    border: 3px solid var(--accent-color);
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    border: 2px solid rgba(255,255,255,0.12);
+    background: linear-gradient(135deg, rgba(255,255,255,0.06), transparent);
+    box-shadow: 0 8px 24px rgba(2,6,23,0.35);
 }
 
 h1 {
-    margin: 1.5rem 0 0.2rem 0;
-    font-size: 2.2rem;
-    font-weight: 600;
+    margin: 1rem 0 0.25rem 0;
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: 0.2px;
 }
 
 .subtitle {
-    font-size: 1.1rem;
-    opacity: 0.7;
-    margin-top: 0;
+    font-size: 1rem;
+    color: var(--muted);
+    margin-top: 0.25rem;
 }
 
 .container {
-    max-width: 700px;
+    max-width: 900px;
     margin: 0 auto;
-    padding: 0 1.5rem;
+    padding: 2rem 1.5rem 4rem;
+    width: 100%;
 }
 
+/* cards and sections */
 section {
-    margin-bottom: 2.5rem;
+    margin-bottom: 2.25rem;
+    background: linear-gradient(180deg, transparent, var(--glass));
+    padding: 1.25rem;
+    border-radius: 12px;
+    backdrop-filter: blur(6px) saturate(110%);
+    box-shadow: 0 6px 18px rgba(2,6,23,0.06);
 }
 
 h2 {
-    font-size: 1.4rem;
-    border-bottom: 2px solid var(--accent-color);
-    padding-bottom: 0.3rem;
-    display: inline-block;
-    margin-bottom: 1rem;
+    font-size: 1.125rem;
+    margin: 0 0 0.75rem 0;
+    color: var(--text-color);
 }
 
-p {
-    margin-bottom: 1rem;
-    text-align: justify;
+p { margin: 0 0 1rem 0; color: var(--muted); }
+
+.links-row {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
 }
 
-.email-link {
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.45rem 0.9rem;
+    background: linear-gradient(90deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+    border: 1px solid rgba(255,255,255,0.06);
     color: var(--accent-color);
     text-decoration: none;
-    font-weight: 500;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 0.95rem;
 }
 
-.email-link:hover {
-    text-decoration: underline;
+.btn.primary {
+    background: linear-gradient(90deg, var(--accent-color), #3da0ff);
+    color: white;
+    box-shadow: 0 6px 18px rgba(63,138,255,0.18);
 }
+
+.projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1rem;
+}
+
+.project-card {
+    padding: 1rem;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.03);
+}
+
+.project-card h3 { margin: 0 0 0.35rem 0; }
 
 footer {
     text-align: center;
-    padding: 3rem 1rem;
-    font-size: 0.85rem;
-    opacity: 0.5;
-    font-style: italic;
+    padding: 2.5rem 1rem;
+    color: var(--muted);
+    font-size: 0.9rem;
+}
+
+/* subtle responsive tweaks */
+@media (max-width: 560px) {
+    header { padding-top: 3.5rem; }
+    h1 { font-size: 1.6rem; }
+    .container { padding: 1.25rem; }
+    section { padding: 1rem; }
 }
