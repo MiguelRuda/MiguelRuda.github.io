@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-    <!-- Canvas de estrelas (fica atrás do conteúdo) -->
     <canvas id="starfield" aria-hidden="true"></canvas>
 
     <div class="site">
@@ -21,7 +20,7 @@
             <section id="sobre">
                 <h2>Sobre Mim</h2>
                 <p>Atualmente finalizando o terceiro semestre do curso de Ciência da Computação no IME-USP.</p>
-                <p>Tenho interesse especial na área de dados e por isso penso em seguir essa trilha durante a graduação. No entanto, isso não me impede de aventurar pelos mais diversos campos da C[...]
+                <p>Tenho interesse especial na área de dados e por isso penso em seguir essa trilha durante a graduação. No entanto, isso não me impede de aventurar pelos mais diversos campos da C[...]</p>
             </section>
 
             <section id="contato">
@@ -35,7 +34,6 @@
         </footer>
     </div>
 
-    <!-- Script do starfield (leve, sem dependências) -->
     <script>
     (function () {
         const canvas = document.getElementById('starfield');
@@ -54,10 +52,12 @@
             initStars();
         }
 
-        function rnd(min, max) { return Math.random() * (max - min) + min; }
+        function rnd(min, max) {
+            return Math.random() * (max - min) + min;
+        }
 
         function initStars() {
-            const count = Math.round((width * height) / (1200 * dpr)); // ajusta densidade
+            const count = Math.round((width * height) / (1200 * dpr));
             stars = new Array(count).fill().map(() => ({
                 x: rnd(0, width),
                 y: rnd(0, height),
@@ -67,12 +67,20 @@
         }
 
         let t = 0;
+
         function draw() {
             t += 0.01;
             ctx.clearRect(0, 0, width, height);
 
-            // leve brilho radial no centro para sugerir galáxia
-            const grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, Math.max(width, height) * 0.8);
+            const grad = ctx.createRadialGradient(
+                cx,
+                cy,
+                0,
+                cx,
+                cy,
+                Math.max(width, height) * 0.8
+            );
+
             grad.addColorStop(0, 'rgba(255,255,255,0.02)');
             grad.addColorStop(1, 'rgba(0,0,0,0)');
             ctx.fillStyle = grad;
@@ -80,23 +88,22 @@
 
             for (let i = 0; i < stars.length; i++) {
                 const s = stars[i];
-                // movimento sutil
+
                 s.x += Math.sin(t + s.z * 10) * 0.1 * s.z;
                 s.y += Math.cos(t + s.z * 7) * 0.1 * s.z;
 
-                // loop when off-screen
                 if (s.x < -10 || s.x > width + 10 || s.y < -10 || s.y > height + 10) {
                     s.x = rnd(0, width);
                     s.y = rnd(0, height);
                 }
 
                 const alpha = 0.6 * s.z;
+
                 ctx.beginPath();
                 ctx.fillStyle = 'rgba(255,255,255,' + alpha.toFixed(2) + ')';
                 ctx.arc(s.x, s.y, s.r * dpr, 0, Math.PI * 2);
                 ctx.fill();
 
-                // ocasional pequeno brilho maior
                 if (Math.random() < 0.0015) {
                     ctx.beginPath();
                     ctx.fillStyle = 'rgba(255,236,196,0.08)';
@@ -108,14 +115,17 @@
             requestAnimationFrame(draw);
         }
 
-        // otimização: pausar animação quando aba inativa
         let running = true;
+
         document.addEventListener('visibilitychange', () => {
             running = !document.hidden;
-            if (running) requestAnimationFrame(draw);
+            if (running) {
+                requestAnimationFrame(draw);
+            }
         });
 
         window.addEventListener('resize', resize);
+
         resize();
         requestAnimationFrame(draw);
     })();
